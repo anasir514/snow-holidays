@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  mysql_db:
+    container_name: mysql_container
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: qweasd31
+      MYSQL_DATABASE: wordprss_databese
+      MYSQL_USER: wordprss_user
+      MYSQL_PASSWORD: qweasd321
+    volumes:
+      - mysql_vol:/var/lib/mysql
+
+  wordpress:    
+    depends_on:
+      - mysql_db
+    image: wordpress:latest
+    restart: always
+    ports:
+      - "5550:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql_db:3306
+      WORDPRESS_DB_USER: wordprss_user
+      WORDPRESS_DB_PASSWORD: qweasd321
+      WORDPRESS_DB_NAME: wordprss_databese        
+    volumes:
+      ["./:/var/www/html"]
+      
+volumes:
+  mysql_vol: {}
